@@ -1,4 +1,5 @@
 #pragma once
+//#include <iostream>
 
 template <typename MyType>
 class My_list
@@ -11,9 +12,41 @@ public:
 	void My_pop_back();
 	void My_print();
 	void My_remove(int number);
-	void My_erase();
+	void My_clear();
 
 	~My_list();
+
+	friend std::ostream& operator<< (std::ostream& os, const My_list<MyType> out)
+	{
+
+		My_list_element* to_operator = out.first;		// temporary container
+		
+		os << "Operator <<\n" << out.first << std::endl;
+
+		if (out.first != nullptr) {								// check, is list empty
+
+			for (int i = 0; i < out.my_size; ++i)				// cycle, trust "my_size"
+			{
+
+				os << to_operator->MyGet_value()
+					<< ", THIS is " << to_operator
+					<< ", prev is " << to_operator->MyGetPrev()
+					<< ", next is " << to_operator->MyGetNext()
+					<< std::endl;
+
+				to_operator = to_operator->MyGetNext();		// switch to next element
+
+			}
+
+			os << "End of list\n" << out.last << std::endl;
+
+		}
+
+		return os;
+
+		// TODO: insert return statement here
+
+	}
 
 
 private:
@@ -29,10 +62,10 @@ private:
 		//My_list_element(MyType* prev, MyType value, MyType* next);		// Do i need it?
 
 		MyType MyGet_value();
-		My_list_element* MyGetPrev() {return prev;}		// Can not make definition below, so place it here
-		My_list_element* MyGetNext() {return next;}
+		My_list_element* MyGetPrev() {return prev;}		// Somewhy can not make definition below, so have to place it here
+		My_list_element* MyGetNext() {return next;}		// Pointer on nested class object is the reason.
 
-		void MySetValue(MyType set_value);		// In contrast of this. This can be defined below
+		void MySetValue(MyType set_value);				// In contrast of this. This can be defined below
 		void MySetPrev(My_list_element* set_prev);
 		void MySetNext(My_list_element* set_next);
 		
@@ -203,11 +236,11 @@ inline void My_list<MyType>::My_list_element::MySetNext(My_list_element* set_nex
 }
 
 template<typename MyType>
-void My_list<MyType>::My_erase()
+void My_list<MyType>::My_clear()
 {
 	My_list_element* tmp = first;
 	My_list_element* e_next;
-		
+	
 	for (int i = 0; i < my_size; ++i)
 	{
 
@@ -230,3 +263,34 @@ My_list<MyType>::~My_list()
 	std::cout << "List deleted\n";
 
 }
+
+//template<typename MyType>
+//std::ostream& operator<<(std::ostream& os, const My_list<MyType>& out)			// Not My_list<MyType>::operator !
+//{
+//	My_list_element* to_operator = first;		// temporary container
+//
+//	os << "Operator <<\n" << first << std::endl;
+//
+//	if (first != nullptr) {								// check, is list empty
+//
+//		for (int i = 0; i < my_size; ++i)				// cycle, trust "my_size"
+//		{
+//
+//			os << to_operator->MyGet_value()
+//				<< ", THIS is " << to_operator
+//				<< ", prev is " << to_operator->MyGetPrev()
+//				<< ", next is " << to_operator->MyGetNext()
+//				<< std::endl;
+//
+//			to_operator = to_operator->MyGetNext();		// switch to next element
+//
+//		}
+//
+//		os << "End of list\n" << last << std::endl;
+//
+//	}
+//
+//	return os;
+//
+//	// TODO: insert return statement here
+//}
